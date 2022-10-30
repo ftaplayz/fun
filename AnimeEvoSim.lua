@@ -94,6 +94,7 @@ farm:CreateToggle({
                     local func;
                     func = v.ChildAdded:Connect(function(mob)
                         mob:WaitForChild("Head");
+                        mob.Head:WaitForChild("UID");
                         task.wait(getgenv().timeKillDef);
                         while tonumber(string.match(mob.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoDef == true do
                             game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",mob, mob.Torso});
@@ -190,7 +191,7 @@ farm:CreateSlider({
     Name = "Auto defense delay to kill",
     Range = {0, 30},
     Increment = 1,
-    Suffix = "timerDef",
+    Suffix = "Seconds",
     CurrentValue = 5,
     Flag = "defTimerSlider",
     Callback = function(val)
