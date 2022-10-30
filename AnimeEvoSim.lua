@@ -35,7 +35,6 @@ for _,v in ipairs(workspace.__WORKSPACE.Areas:GetChildren()) do
         table.insert(names, v.Name);
     end
 end
-getgenv().allFarm = {};
 getgenv().zoneAll = names[1];
 farm:CreateDropdown({
     Name = "Zone",
@@ -43,9 +42,6 @@ farm:CreateDropdown({
     CurrentOption = names[1],
     Flag = "mobszone",
     Callback = function(zone)
-        for i, v in ipairs(getgenv().allFarm) do
-            v:Disconnect();
-        end
         if workspace.__WORKSPACE.Mobs:FindFirstChild(zone) then
             getgenv().zoneAll = zone;
         else
@@ -82,22 +78,6 @@ farm:CreateToggle({
         end
     end
 });
-
---[[
-workspace.__WORKSPACE.Mobs.ChildAdded:Connect(function(zone)
-    table.insert(namesZone, zone.Name);
-    allMobs:Set(namesZone);
-end);]]
-
---[[
-workspace.__WORKSPACE.Mobs.ChildRemoved:Connect(function(zone)
-    for i, v in ipairs(namesZone) do
-        if v.Name == zone then
-            table.remove(namesZone, i);
-        end
-    end
-    allMobs:Set(namesZone);
-end)]]
 
 farm:CreateSection("Options");
 local power = coroutine.create(function()
@@ -144,7 +124,7 @@ local rangeFarm = farm:CreateSlider({
 	Increment = 100,
 	Suffix = "Range",
 	CurrentValue = 500,
-	Flag = "rangeSlider", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "rangeSlider",
 	Callback = function(val)
         getgenv().range = val;
 	end,
