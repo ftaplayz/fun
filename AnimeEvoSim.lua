@@ -1,5 +1,5 @@
 getgenv().range = 500;
-
+getgenv().timeKillDef = 5;
 
 local rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))();
 local window = rayfield:CreateWindow({
@@ -60,7 +60,7 @@ farm:CreateToggle({
                 for _,v in ipairs(workspace.__WORKSPACE.Mobs:FindFirstChild(getgenv().zoneAll):GetChildren()) do
                     local func;
                     func = v.HumanoidRootPart:GetPropertyChangedSignal("Position"):Connect(function()
-                        while tonumber(string.match(v.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= getgenv().range and getgenv().allFarmState do
+                        while tonumber(string.match(v.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and (v.HumanoidRootPart.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= getgenv().range and getgenv().allFarmState == true do
                             game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",v, v.Torso});
                             task.wait();
                         end
@@ -78,6 +78,46 @@ farm:CreateToggle({
         end
     end
 });
+
+farm:CreateSection("Auto Defense");
+getgenv().autoDef = false;
+farm:CreateToggle({
+    Name = "Kill mobs",
+    CurrentValue = false,
+    Flag = "autoWave",
+    Callback = function(state)
+        getgenv().autoDef = state;
+        if getgenv().autoDef then
+            for _, v in ipairs(workspace.__WORKSPACE.Mobs:GetChildren()) do
+                if string.match(v.Name, "Defense") then
+                    rayfield:Notify("Auto Defense", "Currently farming zone: "..v.Name);
+                    local func;
+                    func = v.ChildAdded:Connect(function(mob)
+                        mob:WaitForChild("Head");
+                        task.wait(getgenv().timeKillDef);
+                        while tonumber(string.match(mob.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoDef == true do
+                            game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",mob, mob.Torso});
+                            task.wait();
+                        end
+                        if getgenv().autoDef == false then
+                            func:Disconnect();
+                        end
+                    end)
+                    for i, mob in ipairs(v:GetChildren()) do
+                        coroutine.wrap(function()
+                            while tonumber(string.match(mob.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoDef == true do
+                                game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",mob, mob.Torso});
+                                task.wait();
+                            end
+                        end)();
+                    end
+                    break;
+                end
+            end
+        end
+    end
+});
+
 
 farm:CreateSection("Options");
 local power = coroutine.create(function()
@@ -146,6 +186,17 @@ farm:CreateToggle({
         end
     end
 });
+farm:CreateSlider({
+    Name = "Auto defense delay to kill",
+    Range = {0, 30},
+    Increment = 1,
+    Suffix = "timerDef",
+    CurrentValue = 5,
+    Flag = "defTimerSlider",
+    Callback = function(val)
+        getgenv().timeKillDef = val;
+    end
+})
 
 farm:CreateSection("Stats");
 local rankupReq = farm:CreateParagraph({Title = "Stats required for rank up", Content = game:GetService("Players").LocalPlayer.PlayerGui.UI.CenterFrame["Rank Up"].Frame.CostPower.UID.Text.."\n"..game:GetService("Players").LocalPlayer.PlayerGui.UI.CenterFrame["Rank Up"].Frame.CostCoins.UID.Text});
@@ -207,6 +258,7 @@ misc:CreateButton({
 misc:CreateButton({
     Name = "Destroy GUI",
     Callback = function()
+        getgenv().autoDef = false;
         getgenv().aP = false;
         if getgenv().coinFarm then
             getgenv().coinFarm:Disconnect();
