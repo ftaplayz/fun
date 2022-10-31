@@ -171,6 +171,33 @@ farm:CreateToggle({
                             con:Disconnect();
                         end
                     end)
+                    local currentPosition = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame;
+                    local farmTrue;
+                    local bossFound = false;
+                    if getgenv().allFarmState then
+                        farmTrue = true;
+                        getgenv().allFarmState = false;
+                    end
+                    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
+                    workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
+                    workspace.__WORKSPACE.Mobs[v.Name].ChildAdded:Connect(function(npc)
+                        if table.find(bosses, npc.Name) then
+                            while tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
+                                game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
+                                task.wait();
+                            end
+                            bossFound = true;
+                        end
+                    end)
+                    while bossFound == false do
+                        task.wait();
+                    end
+                    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = currentPosition;
+                    task.wait(0.2);
+                    if farmTrue then
+                        getgenv().allFarmState = true;
+                        farmAll();
+                    end
                 end
             end
         end
