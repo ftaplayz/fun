@@ -138,26 +138,29 @@ farm:CreateToggle({
             for _,v in ipairs(workspace.__BOSSES:GetChildren()) do
                 if not workspace.__WORKSPACE.Areas[v.Name]:FindFirstChild("Door") then
                     local con;
-                    con = v.ChildAdded:Connect(function(boss)
+                    con = v.ChildAdded:Connect(function(hud)
                         if getgenv().autoBossState then
                             local currentPosition = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame;
                             local farmTrue;
+                            local bossFound = false;
                             if getgenv().allFarmState then
                                 farmTrue = true;
                                 getgenv().allFarmState = false;
                             end
                             game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
                             workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
-                            task.wait(1);
-                            for index, mob in ipairs(workspace.__WORKSPACE.Areas[v.Name]:GetChildren()) do
-                                if table.find(bosses, mob.Name) then
-                                    while tonumber(string.match(mob.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
-                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",mob, mob.Torso});
+                            workspace.__WORKSPACE.Mobs[v.Name].ChildAdded:Connect(function(npc)
+                                if table.find(bosses, npc.Name) then
+                                    while tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
+                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
                                         task.wait();
                                     end
+                                    bossFound = true;
                                 end
+                            end)
+                            while bossFound == false do
+                                task.wait();
                             end
-                            task.wait(0.05);
                             game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = currentPosition;
                             task.wait(0.2);
                             if farmTrue then
