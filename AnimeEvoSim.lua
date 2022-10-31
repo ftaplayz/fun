@@ -144,12 +144,13 @@ farm:CreateToggle({
                         end
                         local currentPosition = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame;
                         local farmTrue;
-                        workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
+                        
                         if getgenv().allFarmState then
                             farmTrue = true;
                             getgenv().allFarmState = false;
                         end
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
+                        workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
                         task.wait(0.5);
                         for _, v in ipairs(workspace.__WORKSPACE.Areas[v.Name]:GetChildren()) do
                             if table.find(bosses, v.Name) then
