@@ -3,7 +3,7 @@ getgenv().timeKillDef = 5;
 getgenv().allFarmState = false;
 getgenv().autoBossState = false;
 
-local bosses = {"Light Speed","Strongest Punch","Time Stop","Kayoken","Sword Master","Berserk"};
+local bosses = {"Light Speed","Strongest Punch","Time Stop","Kayoken","Sword Master","Berserk","Black Hole"};
 
 
 local rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))();
@@ -129,7 +129,7 @@ farm:CreateToggle({
 });
 farm:CreateSection("Bosses");
 farm:CreateToggle({
-    Name = "Auto farm boss",
+    Name = "Auto farm boss (EXPERIMENTAL)",
     CurrentValue = false,
     Flag = "autoBoss",
     Callback = function(state)
@@ -148,17 +148,33 @@ farm:CreateToggle({
                                 getgenv().allFarmState = false;
                             end
                             game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
-                            workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
                             local npcFind;
-                            npcFind = workspace.__WORKSPACE.Mobs[v.Name].ChildAdded:Connect(function(npc)
+                            npcFind = workspace.__WORKSPACE.Mobs:WaitForChild(v.Name).ChildAdded:Connect(function(npc)
                                 if table.find(bosses, npc.Name) then
-                                    while tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
-                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
-                                        task.wait();
+                                    local head = npc:WaitForChild("Head");
+                                    local uid = npc.Head:WaitForChild("UID");
+                                    while npc:FindFirstChild("Head") and getgenv().autoBossState do
+                                        if tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 then
+                                            game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
+                                            task.wait();
+                                        end
                                     end
                                     bossFound = true;
                                 end
                             end)
+                            for i, npcs in ipairs(workspace.__WORKSPACE.Mobs:WaitForChild(v.Name):GetChildren()) do
+                                if table.find(bosses, npcs.Name) then
+                                    local head = npcs:WaitForChild("Head");
+                                    local uid = npcs.Head:WaitForChild("UID");
+                                    while npcs:FindFirstChild("Head") and getgenv().autoBossState do
+                                        if tonumber(string.match(npcs.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 then
+                                            game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npcs, npcs.Torso});
+                                            task.wait();
+                                        end
+                                    end
+                                    bossFound = true;
+                                end
+                            end
                             while bossFound == false do
                                 task.wait();
                             end
@@ -182,17 +198,33 @@ farm:CreateToggle({
                             getgenv().allFarmState = false;
                         end
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
-                        workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
                         local npcFind;
-                        npcFind =  workspace.__WORKSPACE.Mobs[v.Name].ChildAdded:Connect(function(npc)
+                        npcFind =  workspace.__WORKSPACE.Mobs:WaitForChild(v.Name).ChildAdded:Connect(function(npc)
                             if table.find(bosses, npc.Name) then
-                                while tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
-                                    game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
-                                    task.wait();
+                                local head = npc:WaitForChild("Head");
+                                local uid = npc.Head:WaitForChild("UID");
+                                while npc:FindFirstChild("Head") and getgenv().autoBossState do
+                                    if tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 then
+                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
+                                        task.wait();
+                                    end
                                 end
                                 bossFound = true;
                             end
                         end)
+                        for i, npcs in ipairs(workspace.__WORKSPACE.Mobs:WaitForChild(v.Name):GetChildren()) do
+                            if table.find(bosses, npcs.Name) then
+                                local head = npcs:WaitForChild("Head");
+                                local uid = npcs.Head:WaitForChild("UID");
+                                while npcs:FindFirstChild("Head") and getgenv().autoBossState do
+                                    if tonumber(string.match(npcs.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 then
+                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npcs, npcs.Torso});
+                                        task.wait();
+                                    end
+                                end
+                                bossFound = true;
+                            end
+                        end
                         while bossFound == false do
                             task.wait();
                         end
