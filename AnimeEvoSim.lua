@@ -151,10 +151,10 @@ farm:CreateToggle({
                         game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
                         workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
                         task.wait(1);
-                        for _, v in ipairs(workspace.__WORKSPACE.Areas[v.Name]:GetChildren()) do
-                            if table.find(bosses, v.Name) then
+                        for _, mob in ipairs(workspace.__WORKSPACE.Areas[mob.Name]:GetChildren()) do
+                            if table.find(bosses, mob.Name) then
                                 while tonumber(string.match(v.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
-                                    game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",v, v.Torso});
+                                    game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",mob, mob.Torso});
                                     task.wait();
                                 end
                             end
