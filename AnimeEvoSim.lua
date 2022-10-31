@@ -139,38 +139,38 @@ farm:CreateToggle({
                 if not workspace.__WORKSPACE.Areas[v.Name]:FindFirstChild("Door") then
                     local con;
                     con = v.ChildAdded:Connect(function(boss)
-                        if getgenv().autoBossState == false then
-                            con:Disconnect();
-                        end
-                        local currentPosition = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame;
-                        local farmTrue;
-                        if getgenv().allFarmState then
-                            farmTrue = true;
-                            getgenv().allFarmState = false;
-                        end
-                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
-                        workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
-                        task.wait(1);
-                        for _, mob in ipairs(workspace.__WORKSPACE.Areas[mob.Name]:GetChildren()) do
-                            if table.find(bosses, mob.Name) then
-                                while tonumber(string.match(v.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
-                                    game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",mob, mob.Torso});
-                                    task.wait();
+                        if getgenv().autoBossState then
+                            local currentPosition = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame;
+                            local farmTrue;
+                            if getgenv().allFarmState then
+                                farmTrue = true;
+                                getgenv().allFarmState = false;
+                            end
+                            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
+                            workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
+                            task.wait(1);
+                            for index, mob in ipairs(workspace.__WORKSPACE.Areas[v.Name]:GetChildren()) do
+                                if table.find(bosses, mob.Name) then
+                                    while tonumber(string.match(mob.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
+                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",mob, mob.Torso});
+                                        task.wait();
+                                    end
                                 end
                             end
-                        end
-                        task.wait(0.05);
-                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = currentPosition;
-                        task.wait(0.2);
-                        if farmTrue then
-                            getgenv().allFarmState = true;
-                            farmAll();
+                            task.wait(0.05);
+                            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = currentPosition;
+                            task.wait(0.2);
+                            if farmTrue then
+                                getgenv().allFarmState = true;
+                                farmAll();
+                            end
+                        else
+                            con:Disconnect();
                         end
                     end)
                 end
             end
         end
-        
     end
 });
 
