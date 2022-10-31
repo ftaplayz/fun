@@ -149,7 +149,8 @@ farm:CreateToggle({
                             end
                             game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
                             workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
-                            workspace.__WORKSPACE.Mobs[v.Name].ChildAdded:Connect(function(npc)
+                            local npcFind;
+                            npcFind = workspace.__WORKSPACE.Mobs[v.Name].ChildAdded:Connect(function(npc)
                                 if table.find(bosses, npc.Name) then
                                     while tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
                                         game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
@@ -161,8 +162,9 @@ farm:CreateToggle({
                             while bossFound == false do
                                 task.wait();
                             end
+                            npcFind:Disconnect();
                             game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = currentPosition;
-                            task.wait(0.2);
+                            task.wait(2);
                             if farmTrue then
                                 getgenv().allFarmState = true;
                                 farmAll();
@@ -180,7 +182,8 @@ farm:CreateToggle({
                     end
                     game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
                     workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
-                    workspace.__WORKSPACE.Mobs[v.Name].ChildAdded:Connect(function(npc)
+                    local npcFind;
+                    npcFind =  workspace.__WORKSPACE.Mobs[v.Name].ChildAdded:Connect(function(npc)
                         if table.find(bosses, npc.Name) then
                             while tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
                                 game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
@@ -192,8 +195,9 @@ farm:CreateToggle({
                     while bossFound == false do
                         task.wait();
                     end
+                    npcFind:Disconnect();
                     game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = currentPosition;
-                    task.wait(0.2);
+                    task.wait(2);
                     if farmTrue then
                         getgenv().allFarmState = true;
                         farmAll();
