@@ -133,35 +133,44 @@ farm:CreateToggle({
     CurrentValue = false,
     Flag = "autoBoss",
     Callback = function(state)
-        for _,v in ipairs(workspace.__BOSSES:GetChildren()) do
-            if not workspace.__WORKSPACE.Areas[v.Name]:FindFirstChild("Door") then
-                v.ChildAdded:Connect(function(boss)
-                    local currentPosition = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame;
-                    local farmTrue;
-                    if getgenv().allFarmState then
-                        farmTrue = true;
-                        getgenv().allFarmState = false;
-                    end
-                    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
-                    task.wait(0.4);
-                    for _, v in ipairs(workspace.__WORKSPACE.Areas[v.Name]:GetChildren()) do
-                        if table.find(bosses, v.Name) then
-                            while tonumber(string.match(v.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 do
-                                game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",v, v.Torso});
-                                task.wait();
+        getgenv().autoBossState = state;
+        if getgenv().autoBossState then
+            for _,v in ipairs(workspace.__BOSSES:GetChildren()) do
+                if not workspace.__WORKSPACE.Areas[v.Name]:FindFirstChild("Door") then
+                    local con;
+                    con = v.ChildAdded:Connect(function(boss)
+                        if getgenv().autoBossState == false then
+                            con:Disconnect();
+                        end
+                        local currentPosition = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame;
+                        local farmTrue;
+                        workspace.__WORKSPACE.Mobs:WaitForChild(v.Name);
+                        if getgenv().allFarmState then
+                            farmTrue = true;
+                            getgenv().allFarmState = false;
+                        end
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame;
+                        task.wait(0.5);
+                        for _, v in ipairs(workspace.__WORKSPACE.Areas[v.Name]:GetChildren()) do
+                            if table.find(bosses, v.Name) then
+                                while tonumber(string.match(v.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoBossState do
+                                    game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",v, v.Torso});
+                                    task.wait();
+                                end
                             end
                         end
-                    end
-                    task.wait(0.05);
-                    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = currentPosition;
-                    task.wait(0.2);
-                    if farmTrue then
-                        getgenv().allFarmState = true;
-                        farmAll();
-                    end
-                end)
+                        task.wait(0.05);
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = currentPosition;
+                        task.wait(0.2);
+                        if farmTrue then
+                            getgenv().allFarmState = true;
+                            farmAll();
+                        end
+                    end)
+                end
             end
         end
+        
     end
 });
 
@@ -306,6 +315,7 @@ misc:CreateButton({
     Name = "Destroy GUI",
     Callback = function()
         getgenv().autoDef = false;
+        getgenv().autoBossState = false;
         getgenv().aP = false;
         if getgenv().coinFarm then
             getgenv().coinFarm:Disconnect();
