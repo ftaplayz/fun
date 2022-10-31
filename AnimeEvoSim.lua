@@ -195,6 +195,7 @@ farm:CreateToggle({
                     while bossFound == false do
                         task.wait();
                     end
+                    task.wait(1);
                     npcFind:Disconnect();
                     game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = currentPosition;
                     task.wait(2);
