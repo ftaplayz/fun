@@ -5,7 +5,9 @@ getgenv().autoBossState = false;
 
 local bosses = {"Light Speed","Strongest Punch","Time Stop","Kayoken","Sword Master","Berserk","Black Hole"};
 
-
+for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) do
+    v:Disable();
+end
 local rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))();
 local window = rayfield:CreateWindow({
 	Name = "Bad anime game simulator",
@@ -372,14 +374,6 @@ options:CreateDropdown({
 --infoinfo:create
 
 --misc
-misc:CreateButton({
-    Name = "Anti-afk",
-    Callback = function()
-        for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) do
-            v:Disable();
-        end        
-    end
-});
 misc:CreateButton({
     Name = "Destroy GUI",
     Callback = function()
