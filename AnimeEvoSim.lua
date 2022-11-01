@@ -90,10 +90,10 @@ farm:CreateToggle({
     end
 });
 
-farm:CreateSection("Auto Defense");
+farm:CreateSection("Defense");
 getgenv().autoDef = false;
 farm:CreateToggle({
-    Name = "Kill mobs",
+    Name = "Auto Defense Waves",
     CurrentValue = false,
     Flag = "autoWave",
     Callback = function(state)
