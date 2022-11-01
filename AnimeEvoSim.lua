@@ -107,7 +107,7 @@ farm:CreateToggle({
                         mob:WaitForChild("Head");
                         mob.Head:WaitForChild("UID");
                         task.wait(getgenv().timeKillDef);
-                        while tonumber(string.match(mob.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoDef == true do
+                        while v:FindFirstChild(mob) and getgenv().autoDef == true do
                             game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",mob, mob.Torso});
                             task.wait();
                         end
@@ -117,7 +117,7 @@ farm:CreateToggle({
                     end)
                     for i, mob in ipairs(v:GetChildren()) do
                         coroutine.wrap(function()
-                            while tonumber(string.match(mob.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 and getgenv().autoDef == true do
+                            while v:FindFirstChild(mob) and getgenv().autoDef == true do
                                 game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",mob, mob.Torso});
                                 task.wait();
                             end
