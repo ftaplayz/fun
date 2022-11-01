@@ -356,6 +356,7 @@ newButton("Grimoires", "Grimoires");
 newButton("Exchange", "Exchange");
 newButton("Status", "Status");
 newButton("Passive", "Passive");
+newButton("Limit Break", "Limit Break");
 
 options:CreateSection("Zones");
 options:CreateDropdown({
