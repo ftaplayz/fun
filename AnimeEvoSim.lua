@@ -153,26 +153,22 @@ farm:CreateToggle({
                             local npcFind;
                             npcFind = workspace.__WORKSPACE.Mobs:WaitForChild(v.Name).ChildAdded:Connect(function(npc)
                                 if table.find(bosses, npc.Name) then
-                                    local head = npc:WaitForChild("Head");
-                                    local uid = npc.Head:WaitForChild("UID");
-                                    while npc:FindFirstChild("Head") and getgenv().autoBossState do
-                                        if tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 then
-                                            game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
-                                            task.wait();
-                                        end
+                                    npc:WaitForChild("Head");
+                                    npc.Head:WaitForChild("UID");
+                                    while npc and getgenv().autoBossState do
+                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
+                                        task.wait();
                                     end
                                     bossFound = true;
                                 end
                             end)
                             for i, npcs in ipairs(workspace.__WORKSPACE.Mobs:WaitForChild(v.Name):GetChildren()) do
                                 if table.find(bosses, npcs.Name) then
-                                    local head = npcs:WaitForChild("Head");
-                                    local uid = npcs.Head:WaitForChild("UID");
-                                    while npcs:FindFirstChild("Head") and getgenv().autoBossState do
-                                        if tonumber(string.match(npcs.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 then
-                                            game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npcs, npcs.Torso});
-                                            task.wait();
-                                        end
+                                    npcs:WaitForChild("Head");
+                                    npcs.Head:WaitForChild("UID");
+                                    while npcs and getgenv().autoBossState do
+                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npcs, npcs.Torso});
+                                        task.wait();
                                     end
                                     bossFound = true;
                                 end
@@ -205,11 +201,9 @@ farm:CreateToggle({
                             if table.find(bosses, npc.Name) then
                                 local head = npc:WaitForChild("Head");
                                 local uid = npc.Head:WaitForChild("UID");
-                                while npc:FindFirstChild("Head") and getgenv().autoBossState do
-                                    if tonumber(string.match(npc.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 then
-                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
-                                        task.wait();
-                                    end
+                                while npc and getgenv().autoBossState do
+                                    game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npc, npc.Torso});
+                                    task.wait();
                                 end
                                 bossFound = true;
                             end
@@ -218,11 +212,9 @@ farm:CreateToggle({
                             if table.find(bosses, npcs.Name) then
                                 local head = npcs:WaitForChild("Head");
                                 local uid = npcs.Head:WaitForChild("UID");
-                                while npcs:FindFirstChild("Head") and getgenv().autoBossState do
-                                    if tonumber(string.match(npcs.Head.UID.Frame.Frame.UID.Text, "%d+")) > 0 then
-                                        game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npcs, npcs.Torso});
-                                        task.wait();
-                                    end
+                                while npcs and getgenv().autoBossState do
+                                    game:GetService("ReplicatedStorage").Remotes.Client:FireServer({"AttackMob",npcs, npcs.Torso});
+                                    task.wait();
                                 end
                                 bossFound = true;
                             end
