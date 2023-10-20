@@ -19,13 +19,14 @@
     else
         localStorage.setItem("nomeSearch", "");
 
-    var botao = document.createElement("button");
-    botao.appendChild(document.createTextNode("Search"));
+    var botao = document.getElementsByClassName('add-on')[0];
+    //botao.appendChild(document.createTextNode("Search"));
+    botao.style.cursor = 'pointer';
     botao.onclick = function () {
         localStorage.nomeSearch = prompt("Nome a procurar?")
         procurarPessoa();
     };
-    document.body.appendChild(botao);
+    //document.body.appendChild(botao);
 
     function procurarPessoa() {
         if (turma > 1) {
